@@ -4,6 +4,7 @@ import sys
 import string
 import time
 import requests
+import json
 
 from openai import OpenAI
 from elevenlabs import generate, play
