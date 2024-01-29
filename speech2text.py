@@ -35,17 +35,17 @@ def get_openai_response(messages, client):
         return str(e)
     
 def generate_audio(text, api_key):
-    url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
+    url = "https://api.elevenlabs.io/v1/text-to-speech/h4tndIlIAkgh2fsjWL6Z"
     headers = {
         "accept": "audio/mpeg",
-        "xi-api-key": api_key,
+        "xi-api-key": os.environ["eleven_api_key"],
         "Content-Type": "application/json"
     }
     params = {"optimize_streaming_latency": 0}
 
     data = {
         "text": text,
-        "model_id": "eleven_monolingual_v1",
+        "model_id": "eleven_multilingual_v2",
         "voice_settings": {
             "stability": 0,
             "similarity_boost": 0
