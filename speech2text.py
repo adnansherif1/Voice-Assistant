@@ -3,8 +3,10 @@ import os
 import sys
 import string
 import time
-from openai import OpenAI
+import requests
 
+from openai import OpenAI
+from elevenlabs import generate, play
 from deepgram import (
     DeepgramClient,
     DeepgramClientOptions,
@@ -31,6 +33,32 @@ def get_openai_response(messages, client):
             return "No response."
     except Exception as e:
         return str(e)
+    
+def generate_audio(text):
+    url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
+    headers = {
+        "accept": "audio/mpeg",
+        "xi-api-key": "x",
+        "Content-Type": "application/json"
+    }
+    params = {"optimize_streaming_latency": 0}
+
+    data = {
+        "text": text,
+        "model_id": "eleven_monolingual_v1",
+        "voice_settings": {
+            "stability": 0,
+            "similarity_boost": 0
+        }
+    }
+
+    response = requests.post(url, headers=headers, params=params, data=json.dumps(data))
+
+    if response.status_code == 200:
+        return response.content
+    else:
+        print(f"Error: {response.status_code}")
+        print(response.text)
 
 load_dotenv()
 openai_api_key = input("Type your OpenAI API key: ")
@@ -58,6 +86,8 @@ def main():
                 return
             if sentence.lower().translate(str.maketrans('', '', string.punctuation)).startswith('hi dave'):
                 
+                print(f"User: {sentence}\n")
+
                 messages.append({
                     "role": "user",
                     "content": sentence
@@ -72,7 +102,9 @@ def main():
                     "content": response
                 })
 
-                print(f'Goggins: {response}')
+                print(f'Goggins: {response}\n')
+                audio = generate_audio(response)
+                play(audio)
             
         def on_error(self, error, **kwargs):
             print(f"\n\n{error}\n\n")

@@ -3,3 +3,6 @@ elevenlabs
 sounddevice
 soundfile
 SpeechRecognition
+deepgram_sdk
+pyaudio
+python-dotenv
