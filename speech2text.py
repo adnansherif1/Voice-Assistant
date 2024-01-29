@@ -34,11 +34,11 @@ def get_openai_response(messages, client):
     except Exception as e:
         return str(e)
     
-def generate_audio(text):
+def generate_audio(text, api_key):
     url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
     headers = {
         "accept": "audio/mpeg",
-        "xi-api-key": "x",
+        "xi-api-key": api_key,
         "Content-Type": "application/json"
     }
     params = {"optimize_streaming_latency": 0}
@@ -63,6 +63,7 @@ def generate_audio(text):
 load_dotenv()
 openai_api_key = input("Type your OpenAI API key: ")
 deepgram_api_key = input("Type your Deepgram API key: ")
+elevenlabs_api_key = input("Type your ElevenLabs API key: ")
 
 os.environ["OPENAI_API_KEY"] = openai_api_key
 os.environ['DEEPGRAM_API_KEY'] = deepgram_api_key
@@ -103,7 +104,7 @@ def main():
                 })
 
                 print(f'Goggins: {response}\n')
-                audio = generate_audio(response)
+                audio = generate_audio(response, elevenlabs_api_key)
                 play(audio)
             
         def on_error(self, error, **kwargs):
